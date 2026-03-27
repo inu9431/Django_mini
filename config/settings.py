@@ -158,6 +158,9 @@ SPECTACULAR_SETTINGS = {
     'TITLE': '가계부 API',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+    'SWAGGER_UI_SETTINGS': {
+        'withCredentials': True,
+    },
     'COMPONENTS': {
         'securitySchemes': {
             'BearerAuth': {
