@@ -18,8 +18,8 @@ class TestNotification:
         from datetime import date
         Analysis.objects.create(
             user=user,
-            about="테스트 분석",
-            type="weekly",
+            summary="테스트 분석",
+            period_type="weekly",
             period_start=date.today(),
             period_end=date.today()
         )

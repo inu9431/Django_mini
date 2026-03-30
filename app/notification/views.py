@@ -1,5 +1,4 @@
 from rest_framework import generics
-from rest_framework.generics import get_object_or_404
 
 from app.notification.models import Notification
 from app.notification.serializers import NotificationSerializer

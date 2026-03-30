@@ -9,5 +9,5 @@ def create_notification(sender, instance, created, **kwargs):
     if created:
         Notification.objects.create(
             user=instance.user,
-            message=f"새로운 분석 결과가 생성됬습니다: {instance.about}",
+            message=f"새로운 분석 결과가 생성됬습니다: {instance.summary}",
         )

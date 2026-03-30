@@ -12,4 +12,4 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.message} - {self.message[:30]}"
+        return f"{self.user} - {self.message[:30]}"
