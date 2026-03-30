@@ -7,5 +7,5 @@ class AccountAdmin(admin.ModelAdmin):
 
 @admin.register(Transaction)
 class TransactionAdmin(admin.ModelAdmin):
-    list_display = ('account', 'type', 'amount', 'date')
+    list_display = ('account', 'transaction_type', 'amount', 'date')
 

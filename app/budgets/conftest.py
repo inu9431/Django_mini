@@ -8,5 +8,5 @@ def account(user):
 @pytest.fixture
 def transaction(account):
     return Transaction.objects.create(
-        account=account, type="expense", amount=3000, date="2026-03-25"
+        account=account, transaction_type="expense", amount=3000, date="2026-03-25"
     )

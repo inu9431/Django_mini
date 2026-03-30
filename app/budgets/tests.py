@@ -25,7 +25,7 @@ class TestAccount:
 class TestTransaction:
     def test_create(self, account):
         tx = Transaction.objects.create(
-            account=account, type="income", amount=5000, date="2026-03-25"
+            account=account, transaction_type="income", amount=5000, date="2026-03-25"
         )
         assert tx.id is not None
 
@@ -34,7 +34,7 @@ class TestTransaction:
 
     def test_update(self, account):
         tx = Transaction.objects.create(
-            account=account, type="income", amount=5000, date="2026-03-25"
+            account=account, transaction_type="income", amount=5000, date="2026-03-25"
         )
         tx.amount = 9000
         tx.save()
@@ -42,7 +42,7 @@ class TestTransaction:
 
     def test_delete(self, account):
         tx = Transaction.objects.create(
-            account=account, type="income", amount=5000, date="2026-03-25"
+            account=account, transaction_type="income", amount=5000, date="2026-03-25"
         )
         pk = tx.pk
         tx.delete()
@@ -68,8 +68,8 @@ class TresAccountAPI:
 class TestTransactionAPI:
     def test_create(self, auth_client, account):
         res = auth_client.post("/api/budgets/transactions/", {
-            "account": account.pk,
-            "type": "income",
+            "account_id": account.pk,
+            "transaction_type": "income",
             "amount": 5000,
             "date": "2026-03-25",
         })
