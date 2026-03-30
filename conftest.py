@@ -11,7 +11,7 @@ User = get_user_model()
 def user(db):
     return User.objects.create_user(
         email='test@1.com',
-        password='asdasd',
+        password='asdasd112',
         name='test',
         phone='010-1234-5678',
     )

@@ -14,8 +14,8 @@ class TestUser:
         assert user.email == 'test@1.com'
 
     def test_passowrd_is_hashed(self, user):
-        assert user.password != "asdasd"
-        assert user.check_password("asdasd")
+        assert user.password != "asdasd112"
+        assert user.check_password("asdasd112")
 
     def test_read(self, user):
         found = User.objects.get(pk=user.pk)
@@ -36,7 +36,7 @@ class TestAuthAPI:
     def test_register(self, client, db):
         res = client.post("/api/users/register/",{
             "email": "new@1.com",
-            "password": "asdasd",
+            "password": "asdasd112",
             "name": "test1",
             "phone": "010-1234-5678",
         })
@@ -45,7 +45,7 @@ class TestAuthAPI:
     def test_login(self, client, user):
         res = client.post("/api/users/login/",{
             "email": "test@1.com",
-            "password": "asdasd",
+            "password": "asdasd112",
         })
         assert res.status_code == 200
         assert "access" in res.cookies
@@ -55,7 +55,7 @@ class TestAuthAPI:
         # 로그인 해서 쿠키 세팅
         login_res = client.post("/api/users/login/",{
             "email": "test@1.com",
-            "password": "asdasd",
+            "password": "asdasd112",
         })
         client.cookies = login_res.cookies
 
