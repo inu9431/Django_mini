@@ -12,14 +12,14 @@ def account(user):
 
 @pytest.fixture
 def transaction(account):
-    return Transaction.objects.create(account=account, type="income", amount=1000, date='2026-03-20')
+    return Transaction.objects.create(account=account, transaction_type="income", amount=1000, date='2026-03-20')
 
 class TestAnalyzer:
     def test_get_dataframe(self, user, transaction):
         analyzer = Analyzer(user, date(2026, 3, 1), date(2026,3 ,21))
         df = analyzer.get_dataframe()
         assert not df.empty
-        assert list(df.columns) == ['date', 'type', 'amount']
+        assert list(df.columns) == ['date', 'transaction_type', 'amount']
 
     def test_get_dataframe_empty(self, user):
         analyzer = Analyzer(user, date(2026, 1, 1), date(2026, 1, 31))
@@ -33,14 +33,14 @@ class TestAnalyzer:
 
     def test_analyze_creates_analysis(self, user, transaction):
         analyzer = Analyzer(user, date(2026, 3, 1), date(2026, 3, 31))
-        analysis = analyzer.analyze(about="3월 분석", period_type='monthly')
+        analysis = analyzer.analyze(summary="3월 분석", period_type='monthly')
         assert Analysis.objects.filter(user=user).count() == 1
-        assert analysis.type == 'monthly'
+        assert analysis.period_type == 'monthly'
         assert analysis.result_image
 
 class TestAnalysisAPI:
     def test_list(self, auth_client, user):
-        Analysis.objects.create(user=user, about="테스트", type="income", period_start=date(2026, 3, 1), period_end=date(2026, 3, 7)
+        Analysis.objects.create(user=user, summary="테스트", period_type="weekly", period_start=date(2026, 3, 1), period_end=date(2026, 3, 7)
                                 )
         res = auth_client.get('/api/analysis/')
         assert res.status_code == 200
@@ -48,17 +48,17 @@ class TestAnalysisAPI:
 
     def test_filter_by_type(self, auth_client, user):
         Analysis.objects.create(
-            user=user, about='주간', type='weekly',
+            user=user, summary='주간', period_type='weekly',
             period_start=date(2026, 3, 1), period_end=date(2026, 3, 31)
         )
         Analysis.objects.create(
-            user=user, about='월간', type='monthly',
+            user=user, summary='월간', period_type='monthly',
             period_start=date(2026, 3, 1), period_end=date(2026, 3, 31)
         )
         res = auth_client.get('/api/analysis/?type=weekly')
         assert res.status_code == 200
         assert len(res.data) == 1
-        assert res.data[0]['type'] == 'weekly'
+        assert res.data[0]['period_type'] == 'weekly'
 
     def test_only_own_analysis(self, auth_client, user):
         from django.contrib.auth import get_user_model
@@ -67,7 +67,7 @@ class TestAnalysisAPI:
             email = 'other@1.com', password = 'pass', name = 'other', phone = '123'
         )
         Analysis.objects.create(
-            user=other, about='남의 분석', type='weekly',
+            user=other, summary='남의 분석', period_type='weekly',
             period_start=date(2026, 3, 1), period_end=date(2026, 3, 31)
         )
         res = auth_client.get('/api/analysis/')

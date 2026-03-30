@@ -20,7 +20,7 @@ class Analyzer:
         transactions = Transaction.objects.filter(
             account__user=self.user,
             date__range=(self.period_start, self.period_end),
-        ).values("date", "type", "amount")
+        ).values("date", "transaction_type", "amount")
         return pd.DataFrame(list(transactions))
 
     def generate_image(self):
@@ -30,7 +30,7 @@ class Analyzer:
             return None
 
         df["amount"] = df["amount"].astype(float)
-        summary = df.groupby("type")["amount"].sum()
+        summary = df.groupby("transaction_type")["amount"].sum()
 
         fig, ax = plt.subplots()
         summary.plot(kind="bar", ax=ax, color=["green", "red"])
@@ -45,15 +45,15 @@ class Analyzer:
         filename = f"{self.user.id}_{self.period_start}_{self.period_end}.png"
         return ContentFile(buf.read(), name=filename)
 
-    def analyze(self, about, period_type):
+    def analyze(self, summary, period_type):
         from app.analysis.models import Analysis
 
         image = self.generate_image()
 
         analysis = Analysis(
             user=self.user,
-            about=about,
-            type=period_type,
+            summary=summary,
+            period_type=period_type,
             period_start=self.period_start,
             period_end=self.period_end,
         )

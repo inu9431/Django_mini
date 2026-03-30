@@ -6,8 +6,8 @@ class AnalysisSerializer(serializers.ModelSerializer):
         model = Analysis
         fields = [
             'id',
-            'about',
-            'type',
+            'summary',
+            'period_type',
             'period_start',
             'period_end',
             'description',
